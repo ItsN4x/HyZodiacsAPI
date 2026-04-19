@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.10.1'
+    compileOnly 'org.slf4j:slf4j-api:2.0.9'
+    compileOnly 'org.jetbrains:annotations:24.1.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Specification-Title'  : rootProject.providers.gradleProperty('mod_name').get(),
+                'Specification-Vendor' : rootProject.providers.gradleProperty('mod_authors').get(),
+                'Specification-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Title' : "${rootProject.providers.gradleProperty('mod_name').get()} Common",
+                'Implementation-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Vendor': rootProject.providers.gradleProperty('mod_authors').get()
+        )
+    }
+}

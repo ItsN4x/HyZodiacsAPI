@@ -1,0 +1,75 @@
+plugins {
+    id 'fabric-loom' version '1.7-SNAPSHOT'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+    maven { url = 'https://maven.parchmentmc.org' }
+}
+
+archivesBaseName = "${rootProject.providers.gradleProperty('mod_id').get()}-fabric-${rootProject.providers.gradleProperty('fabric121_minecraft_version').get()}"
+version = rootProject.providers.gradleProperty('mod_version').get()
+group = rootProject.providers.gradleProperty('mod_group').get()
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(Integer.parseInt(rootProject.providers.gradleProperty('fabric121_java').get()))
+    withSourcesJar()
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "hyzodiacs_api" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.providers.gradleProperty('fabric121_minecraft_version').get()}"
+    mappings "net.fabricmc:yarn:${rootProject.providers.gradleProperty('fabric121_yarn_mappings').get()}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.providers.gradleProperty('fabric121_loader_version').get()}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.providers.gradleProperty('fabric121_fabric_api_version').get()}"
+
+    implementation project(':common')
+    include project(':common')
+}
+
+processResources {
+    def props = [
+            mod_id             : rootProject.providers.gradleProperty('mod_id').get(),
+            mod_name           : rootProject.providers.gradleProperty('mod_name').get(),
+            mod_version        : rootProject.providers.gradleProperty('mod_version').get(),
+            mod_description    : rootProject.providers.gradleProperty('mod_description').get(),
+            mod_authors        : rootProject.providers.gradleProperty('mod_authors').get(),
+            mod_license        : rootProject.providers.gradleProperty('mod_license').get(),
+            minecraft_version  : rootProject.providers.gradleProperty('fabric121_minecraft_version').get(),
+            loader_version     : rootProject.providers.gradleProperty('fabric121_loader_version').get(),
+            java_version       : rootProject.providers.gradleProperty('fabric121_java').get()
+    ]
+    inputs.properties(props)
+    filesMatching('fabric.mod.json') {
+        expand(props)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = Integer.parseInt(rootProject.providers.gradleProperty('fabric121_java').get())
+}
+
+jar {
+    manifest {
+        attributes(
+                'Specification-Title'  : rootProject.providers.gradleProperty('mod_name').get(),
+                'Specification-Vendor' : rootProject.providers.gradleProperty('mod_authors').get(),
+                'Specification-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Title' : "${rootProject.providers.gradleProperty('mod_name').get()} Fabric 1.21",
+                'Implementation-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Vendor': rootProject.providers.gradleProperty('mod_authors').get()
+        )
+    }
+}

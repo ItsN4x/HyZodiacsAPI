@@ -1,0 +1,10 @@
+allprojects {
+    group = rootProject.providers.gradleProperty('mod_group').get()
+    version = rootProject.providers.gradleProperty('mod_version').get()
+}
+
+// Per-module configuration lives in each subproject's build.gradle.
+// We deliberately avoid a subprojects { ... } block here because ForgeGradle
+// mutates its repository lazily during project configuration, and sharing
+// repositories across subprojects causes "Cannot mutate content repository
+// descriptor after repository has been used" failures.

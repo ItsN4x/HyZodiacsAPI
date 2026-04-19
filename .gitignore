@@ -1,0 +1,34 @@
+# Build output
+.gradle/
+build/
+out/
+*/build/
+*/out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Loom / ForgeGradle
+run/
+runs/
+*/run/
+*/runs/
+*.log
+logs/
+
+# Local env
+.env
+local.properties

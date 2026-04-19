@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "hyZodiac",
+    "ItsN4x"
+  ],
+  "contact": {
+    "homepage": "https://github.com/ItsN4x/HyZodiacsAPI",
+    "sources": "https://github.com/ItsN4x/HyZodiacsAPI",
+    "issues": "https://github.com/ItsN4x/HyZodiacsAPI/issues"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/hyzodiacs_api/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.hyzodiac.api.impl.fabric.FabricCommonBootstrap"
+    ],
+    "client": [
+      "com.hyzodiac.api.impl.fabric.FabricClientBootstrap"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  }
+}

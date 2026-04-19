@@ -1,0 +1,80 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/' }
+    maven { url = 'https://maven.parchmentmc.org' }
+}
+
+archivesBaseName = "${rootProject.providers.gradleProperty('mod_id').get()}-forge-${rootProject.providers.gradleProperty('forge1201_minecraft_version').get()}"
+version = rootProject.providers.gradleProperty('mod_version').get()
+group = rootProject.providers.gradleProperty('mod_group').get()
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(Integer.parseInt(rootProject.providers.gradleProperty('forge1201_java').get()))
+    withSourcesJar()
+}
+
+minecraft {
+    mappings channel: 'official', version: rootProject.providers.gradleProperty('forge1201_minecraft_version').get()
+    copyIdeResources = true
+}
+
+configurations {
+    commonInclude
+    implementation.extendsFrom commonInclude
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${rootProject.providers.gradleProperty('forge1201_minecraft_version').get()}-${rootProject.providers.gradleProperty('forge1201_forge_version').get()}"
+
+    commonInclude project(':common')
+}
+
+// Bundle the common module classes inside the Forge jar so consumers get a single file.
+// We wrap the commonInclude configuration in provider() so it is not resolved during
+// task configuration - ForgeGradle breaks if any repository is touched before its own
+// repository setup finishes.
+jar {
+    dependsOn configurations.commonInclude
+    from(provider { configurations.commonInclude.collect { it.isDirectory() ? it : zipTree(it) } }) {
+        exclude 'META-INF/MANIFEST.MF', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                'Specification-Title'  : rootProject.providers.gradleProperty('mod_name').get(),
+                'Specification-Vendor' : rootProject.providers.gradleProperty('mod_authors').get(),
+                'Specification-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Title' : "${rootProject.providers.gradleProperty('mod_name').get()} Forge 1.20.1",
+                'Implementation-Version': rootProject.providers.gradleProperty('mod_version').get(),
+                'Implementation-Vendor': rootProject.providers.gradleProperty('mod_authors').get()
+        )
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = Integer.parseInt(rootProject.providers.gradleProperty('forge1201_java').get())
+}
+
+processResources {
+    def props = [
+            mod_id             : rootProject.providers.gradleProperty('mod_id').get(),
+            mod_name           : rootProject.providers.gradleProperty('mod_name').get(),
+            mod_version        : rootProject.providers.gradleProperty('mod_version').get(),
+            mod_description    : rootProject.providers.gradleProperty('mod_description').get(),
+            mod_authors        : rootProject.providers.gradleProperty('mod_authors').get(),
+            mod_license        : rootProject.providers.gradleProperty('mod_license').get(),
+            minecraft_version  : rootProject.providers.gradleProperty('forge1201_minecraft_version').get(),
+            forge_version      : rootProject.providers.gradleProperty('forge1201_forge_version').get(),
+            java_version       : rootProject.providers.gradleProperty('forge1201_java').get()
+    ]
+    inputs.properties(props)
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand(props)
+    }
+}
