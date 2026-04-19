@@ -1,0 +1,19 @@
+.gradle/
+build/
+out/
+classes/
+# Eclipse
+*.launch
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+# VSCode
+.vscode/
+bin/
+.settings/
+.classpath
+.project
+# Fabric Loom
+run/
