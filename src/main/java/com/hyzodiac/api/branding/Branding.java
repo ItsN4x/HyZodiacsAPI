@@ -1,7 +1,9 @@
 package com.hyzodiac.api.branding;
 
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
 /**
@@ -16,13 +18,18 @@ import net.minecraft.util.Formatting;
  */
 public record Branding(String modId, String displayName, int accentArgb, String homepage) {
 
+	private Style accentStyle() {
+		// Mask the alpha byte — Minecraft's TextColor is RGB-only.
+		return Style.EMPTY.withColor(TextColor.fromRgb(accentArgb & 0xFFFFFF));
+	}
+
 	public MutableText badge() {
 		return Text.literal("[").formatted(Formatting.DARK_GRAY)
-			.append(Text.literal(displayName).withColor(accentArgb))
+			.append(Text.literal(displayName).setStyle(accentStyle()))
 			.append(Text.literal("]").formatted(Formatting.DARK_GRAY));
 	}
 
 	public MutableText title() {
-		return Text.literal(displayName).withColor(accentArgb);
+		return Text.literal(displayName).setStyle(accentStyle());
 	}
 }
