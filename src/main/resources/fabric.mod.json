@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "hyzodiacapi",
+	"version": "${version}",
+	"name": "HyZodiac API",
+	"description": "Shared library for HyZodiac mods: branding, JSON config framework, HUD overlay framework, Sodium options helper, update checker, branded logger.",
+	"authors": [
+		"hyZodiac",
+		"Ulsters"
+	],
+	"contact": {
+		"sources": "https://github.com/ItsN4x/HyZodiacsAPI",
+		"issues": "https://github.com/ItsN4x/HyZodiacsAPI/issues"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/hyzodiacapi/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.hyzodiac.api.HyZodiacApi"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.18.0",
+		"fabric-api": "*",
+		"minecraft": "~1.21",
+		"java": ">=21"
+	},
+	"suggests": {
+		"sodium": "*",
+		"sodium-options-api": "*",
+		"reeses-sodium-options": "*",
+		"modmenu": "*"
+	}
+}
