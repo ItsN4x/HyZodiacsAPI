@@ -30,7 +30,7 @@ public final class HyZodiacApi implements ModInitializer {
 			MOD_ID,
 			"HyZodiac API",
 			0xFF8A2BE2, // BlueViolet — house brand colour
-			"https://github.com/ItsN4x/HyZodiacsAPI"
+			"https://github.com/ItsN4x/HyZodiacAPI"
 		));
 		LOGGER.info("HyZodiacAPI initialised");
 	}
