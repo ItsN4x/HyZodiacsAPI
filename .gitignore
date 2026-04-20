@@ -1,34 +1,19 @@
-# Build output
 .gradle/
 build/
 out/
-*/build/
-*/out/
-!gradle/wrapper/gradle-wrapper.jar
-
-# IDE
+classes/
+# Eclipse
+*.launch
+# IntelliJ
 .idea/
-.vscode/
 *.iml
-*.iws
 *.ipr
+*.iws
+# VSCode
+.vscode/
+bin/
+.settings/
 .classpath
 .project
-.settings/
-bin/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Loom / ForgeGradle
+# Fabric Loom
 run/
-runs/
-*/run/
-*/runs/
-*.log
-logs/
-
-# Local env
-.env
-local.properties
